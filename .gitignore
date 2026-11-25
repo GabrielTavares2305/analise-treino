@@ -1,0 +1,19 @@
+# Ambiente virtual do Python (cada pessoa cria o seu com "python -m venv venv")
+venv/
+__pycache__/
+*.pyc
+
+# Vídeos baixados do YouTube: pesados e com direitos autorais de terceiros
+videos/
+
+# Modelo de IA: baixado automaticamente na primeira execução
+modelos/
+
+# Clipes dos professores (direitos autorais). Os .json dos modelos podem ir para o Git.
+exercicios/*.mp4
+
+# Dados pessoais de treino
+historico.csv
+
+# Segredos (a partir da Etapa 2)
+.env
