@@ -68,9 +68,11 @@ Contagem de repetições + nota (0-100) + dica: "quadril: 30 graus mais dobrado"
 
 ## 🛠️ Tecnologias
 
-**Em uso:** Python 3.10-3.12 · MediaPipe 0.10.3x (API `PoseLandmarker`) · OpenCV · NumPy · yt-dlp
+**Em uso:** Python 3.14 · MediaPipe 1.2 (API `PoseLandmarker`) · OpenCV 5.1 (contrib) · NumPy · yt-dlp · pytest
 
-**Planejadas:** pytest · Laravel · Sanctum · Livewire · MediaPipe JS · API de LLM
+(versões exatas em `requirements-lock.txt`)
+
+**Planejadas:** Laravel · Sanctum · Livewire · MediaPipe JS · API de LLM
 
 ---
 
@@ -78,7 +80,7 @@ Contagem de repetições + nota (0-100) + dica: "quadril: 30 graus mais dobrado"
 
 ### Etapa 1: Protótipo Python
 - [ ] **Fase 1**: Rodar e entender o protótipo *(em andamento)*
-- [ ] **Fase 2**: Testes automatizados da lógica de análise
+- [x] **Fase 2**: Testes automatizados da lógica de análise (`pytest`, 51 testes)
 - [ ] **Fase 3**: Calibração com vídeos meus fazendo certo × errado
 - [ ] **Fase 4**: Texto com acento, aviso por voz, sessões com vários exercícios
 
@@ -99,7 +101,7 @@ Contagem de repetições + nota (0-100) + dica: "quadril: 30 graus mais dobrado"
 Uso o **Claude Code** como tutor e par de programação, com regras definidas no [`CLAUDE.md`](CLAUDE.md):
 
 - **Explicar antes de fazer**: entendo o conceito antes de escrever o código.
-- **Eu escrevo, a IA revisa**: o protótipo inicial foi gerado com IA; a Fase 1 existe para eu entendê-lo e assumi-lo.
+- **Divisão clara do trabalho**: o protótipo Python (visão computacional) é escrito com o Claude, e eu valido na webcam, registro problemas (`NOTAS_FASE1.md`) e decido; a parte Laravel eu escrevo, com a IA revisando.
 - **Conferir a versão**: a API do MediaPipe mudou (a antiga `mp.solutions` foi removida), então toda sugestão é conferida contra a versão instalada.
 - **Desconfiar e verificar**: quando a IA assume algo que não corresponde ao meu ambiente, corrijo e registro.
 
@@ -107,7 +109,7 @@ Uso o **Claude Code** como tutor e par de programação, com regras definidas no
 
 ## 🚀 Como rodar
 
-Pré-requisitos: Python 3.10-3.12 e uma webcam.
+Pré-requisitos: Python 3.14 e uma webcam **fixa** (desligue enquadramento automático, ex.: Windows Studio Effects).
 
 ```bash
 git clone https://github.com/SEU-USUARIO/treino-natacao.git
@@ -116,6 +118,8 @@ cd treino-natacao
 python -m venv venv                # ambiente isolado para as bibliotecas deste projeto
 # Windows: venv\Scripts\activate  |  Linux/macOS: source venv/bin/activate
 pip install -r requirements.txt    # instala MediaPipe, OpenCV, NumPy e yt-dlp
+# reprodução exata do ambiente testado: pip install -r requirements-lock.txt
+# desenvolvimento (testes): pip install -r requirements-dev.txt && pytest
 
 python app.py                      # abre o menu (o modelo de IA é baixado na 1ª vez)
 ```
@@ -134,6 +138,7 @@ python app.py                      # abre o menu (o modelo de IA é baixado na 1
 | Lento | Em `pose.py`, troque `VARIANTE_MODELO = "full"` por `"lite"` |
 | "Não encontrei repetições" | Trecho curto ou professor fora do quadro: marque de novo |
 | Webcam não abre | Feche outros apps que usam a câmera ou escolha a câmera 1 |
+| Imagem dá zoom / segue o rosto | Desligue o "Enquadramento automático": Configurações → Bluetooth e dispositivos → Câmeras (Windows Studio Effects) |
 
 ---
 

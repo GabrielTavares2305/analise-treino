@@ -109,7 +109,9 @@ class ContadorReps:
             return None
         if self.estado == "repouso":
             if not self._em_repouso(valor):
-                self.estado, self.t_inicio = "saindo", t
+                # pode já chegar no extremo (ex.: quadros perdidos no meio da descida)
+                self.estado = "extremo" if self._no_extremo(valor) else "saindo"
+                self.t_inicio = t
         elif self.estado == "saindo":
             if self._no_extremo(valor):
                 self.estado = "extremo"
