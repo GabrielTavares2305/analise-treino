@@ -214,6 +214,9 @@ def treinar(ex, meta, camera=0):
 
     media = round(float(np.mean(notas)), 1) if notas else 0
     quantidade = round(tempo_ok, 1) if isometrico else reps
+    if not quantidade:
+        print("\nNenhuma repetição/segundo válido: treino não registrado no histórico.")
+        return
     salvar_historico(ex, quantidade, media)
     unidade = "segundos na posição correta" if isometrico else "repetições"
     print(f"\nResumo: {quantidade} {unidade}, nota média {media}.")

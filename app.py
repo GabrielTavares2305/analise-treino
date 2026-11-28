@@ -4,31 +4,56 @@ app.py - Menu principal. Rode com:  python app.py
 import csv
 import os
 
+from yt_dlp.utils import DownloadError
+
 import referencia
 import treino
 
 
-def pedir_int(msg, padrao):
-    r = input(f"{msg} [{padrao}]: ").strip()
-    return int(r) if r.isdigit() else padrao
+def converter_int(texto: str, padrao: int, minimo: int = 0, maximo: int | None = None) -> int:
+    """Converte a resposta do usuário. Vazio = padrão. Lança ValueError com a explicação.
+
+    Separada de pedir_int (que faz o input) para poder ser testada sem teclado.
+    """
+    texto = texto.strip()
+    if not texto:
+        return padrao
+    try:
+        valor = int(texto)
+    except ValueError:
+        raise ValueError(f"'{texto}' não é um número inteiro.") from None
+    if valor < minimo or (maximo is not None and valor > maximo):
+        faixa = f"de {minimo} a {maximo}" if maximo is not None else f"a partir de {minimo}"
+        raise ValueError(f"Digite um número {faixa}.")
+    return valor
 
 
-def adicionar_exercicio():
+def pedir_int(msg: str, padrao: int, minimo: int = 0, maximo: int | None = None) -> int:
+    """Pergunta até receber um inteiro válido (EAFP: tenta converter e trata o erro)."""
+    while True:
+        try:
+            return converter_int(input(f"{msg} [{padrao}]: "), padrao, minimo, maximo)
+        except ValueError as e:
+            print(f"  {e}")
+
+
+def adicionar_exercicio() -> None:
     print("\nCole o link do YouTube OU o caminho de um vídeo no seu computador.")
     origem = input("> ").strip().strip('"')
     if not origem:
         return
-    try:
-        if origem.startswith("http"):
-            caminho, titulo = referencia.baixar_youtube(origem)
-        else:
-            caminho, titulo = origem, os.path.basename(origem)
-            if not os.path.exists(caminho):
-                print("Arquivo não encontrado.")
-                return
-    except Exception as e:
-        print(f"Erro ao baixar: {e}\nDica: rode 'pip install -U yt-dlp' e tente de novo.")
-        return
+    if origem.startswith("http"):
+        # só o download fica no try: outros erros (bugs) devem aparecer com traceback
+        try:
+            caminho, _titulo = referencia.baixar_youtube(origem)
+        except DownloadError as e:
+            print(f"Erro ao baixar: {e}\nDica: rode 'pip install -U yt-dlp' e tente de novo.")
+            return
+    else:
+        caminho = origem
+        if not os.path.exists(caminho):
+            print("Arquivo não encontrado.")
+            return
 
     while True:
         nome = input("\nNome do exercício (ex.: Prancha, Flexão, Superman): ").strip()
@@ -50,8 +75,8 @@ def escolher_exercicio(titulo):
     for i, ex in enumerate(lista, 1):
         tipo = "isométrico" if ex["tipo"] == "isometrico" else f"reps, ~{ex['duracao_media_s']}s cada"
         print(f"  {i}. {ex['nome']}  ({tipo})")
-    n = pedir_int("Número", 1)
-    return lista[n - 1] if 1 <= n <= len(lista) else None
+    n = pedir_int("Número", 1, minimo=1, maximo=len(lista))
+    return lista[n - 1]
 
 
 def menu_treinar():
@@ -59,9 +84,9 @@ def menu_treinar():
     if not ex:
         return
     if ex["tipo"] == "isometrico":
-        meta = pedir_int("Quantos segundos segurar a posição?", 30)
+        meta = pedir_int("Quantos segundos segurar a posição?", 30, minimo=1)
     else:
-        meta = pedir_int("Quantas repetições?", 10)
+        meta = pedir_int("Quantas repetições?", 10, minimo=1)
     camera = pedir_int("Número da câmera (0 = webcam padrão)", 0)
     treino.treinar(ex, meta, camera)
 

@@ -1,0 +1,3 @@
+# Ferramentas só de desenvolvimento (papel do "require-dev" do Composer)
+-r requirements.txt
+pytest~=9.2.0

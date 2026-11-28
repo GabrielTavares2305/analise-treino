@@ -1,4 +1,9 @@
-mediapipe>=0.10.30
-opencv-python
-numpy
-yt-dlp[default]
+# Dependências DIRETAS do app (papel do composer.json).
+# "~=X.Y.Z" aceita só correções da série X.Y (ex.: ~=1.2.3 aceita 1.2.9, não 1.3.0).
+# Versões exatas de TODOS os pacotes (inclusive transitivos): requirements-lock.txt
+mediapipe~=1.2.3
+# contrib, e não opencv-python: o mediapipe já depende do contrib, e os dois
+# juntos disputam a mesma pasta cv2 (ver NOTAS_FASE1.md, item 1)
+opencv-contrib-python~=5.1.0
+numpy~=2.5.5
+yt-dlp[default]>=2026.11.23  # sem teto: o YouTube muda e o yt-dlp precisa estar sempre novo

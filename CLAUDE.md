@@ -15,6 +15,14 @@ por vídeo, e ninguém corrige minha postura.
 - Este projeto também é meu **portfólio**. Quero entender cada decisão a ponto de explicá-la numa entrevista.
 
 ## Como você (Claude) deve me ajudar
+
+> **Modo de trabalho (decidido em 2026-11-28):**
+> - **Etapa 1 (Python, Fases 1–4):** o Claude escreve o código, roda os testes automatizados e me
+>   entrega um resumo curto do que mudou e por quê, mais uma **lista do que eu preciso testar com a
+>   webcam** (o que só um corpo real na câmera valida). As regras 2, 5 e 8 abaixo não se aplicam ao
+>   Python; a regra 3 vale de forma resumida.
+> - **Etapa 2 em diante (Laravel e web):** voltam todas as regras abaixo: eu escrevo, o Claude guia.
+
 1. **Explique antes de fazer.** Antes de qualquer código ou comando, explique o conceito envolvido,
    por que ele existe e qual problema resolve.
 2. **Me deixe escrever o código.** Por padrão, me guie com instruções e dicas. Só escreva o código
@@ -29,8 +37,9 @@ por vídeo, e ninguém corrige minha postura.
    (MediaPipe: https://ai.google.dev/edge/mediapipe/solutions/vision/pose_landmarker ;
    OpenCV: https://docs.opencv.org ; Laravel: https://laravel.com/docs).
 7. **Versão:** confira as versões em `requirements.txt` / `pip show` (e em `composer.json` na parte PHP)
-   antes de explicar algo que mudou entre versões. **Atenção:** o MediaPipe 0.10.3x **removeu**
-   a API antiga `mp.solutions.pose`; este projeto usa a API nova `PoseLandmarker` (Tasks). Não sugira
+   antes de explicar algo que mudou entre versões. **Atenção:** a API antiga `mp.solutions.pose` foi
+   **removida** a partir do MediaPipe 0.10.30; este projeto usa a API `PoseLandmarker` (Tasks) e foi
+   testado com a versão travada em `requirements.txt` (MediaPipe 1.2.x, Python 3.14). Não sugira
    código de tutoriais antigos.
 8. **Um passo de cada vez.** Não implemente várias coisas de uma vez; termine um passo, confirme que
    entendi, e só então siga.
